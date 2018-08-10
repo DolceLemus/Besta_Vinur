@@ -109,11 +109,11 @@ $(document).ready(function(){
                                 <li class="list-group-item">Disponible: {{quantity}} pz</li>
                             </ul>
                             <div class="card-body">
-                                <a href="#" class="btn btn-primary">Comprar</a>
+                                <a  class="btn buy btn-primary">Comprar</a>
                             </div>
                         </div>`;
 
-                   
+                 
 
                 let replaceTemplateHome = templateHome.replace("{{url}}", url)
                     .replace("{{price}}", price)
@@ -124,7 +124,7 @@ $(document).ready(function(){
                 $("#container").append(replaceTemplateHome);
                 $("#paypal-button").show();
                 $('#home-h').hide();
-
+                // #(".buy").click(mounth);
                 
                 
             });
