@@ -1,7 +1,7 @@
 
 $(document).ready(function(){
 
-const homeTemplate = () => {
+    const getHome = $("form").submit(function(ev) {
     let templateHome = ` 
     <main>
         <section id="cont-home" class="opac">
@@ -49,40 +49,60 @@ const homeTemplate = () => {
             </div>
         </section>
     </main>`;
-    console.log(templateHome);
     $("#container").append(templateHome);
 
-}
+})
 
-// IMAGES
-    const url = 'http://webservices.amazon.com/onca/xml?AWSAccessKeyId={{AWS Access Key ID}}';
-    const template = function (name, picture, id) {
-        var t = "<div id='pokemon'><img src='" + picture + "'/><p>'" + name + "'</p><p> ID: '" + id + "'</p></div>"
-        return t;
-    }
 
-    fetch(url)
-        .then((resp) => resp.json())
-        .then(function (data) {
-            console.log(data.pokemon_entries);
-            let ul = document.getElementById('list');
-            let pokemones = data.pokemon_entries;
-            pokemones.forEach(element => {
-                let picture = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + element.entry_number + '.png';
-                let name = element.pokemon_species.name;
-                let id = element.entry_number;
-                $('#list').append(template(name, picture, id));
+    const getItems = $("form").submit(function (ev) {
+        ev.preventDefault();
+        const getURL = 'https://api.mercadolibre.com/sites/MLM/search?q="+ pets';
+
+        $.get(getURL, function (data) {
+
+            let items = data.results;
+            console.log(items);
+            items.forEach(element => {
+                let url = element.thumbnail;
+                let title = element.title;
+                let price = element.price;
+                let currency = element.currency_id;
+                let quantity = element.available_quantity;
+                let templateHome = `
+                        <div class="card" style="width: 18rem;">
+                            <img class="card-img-top" src="{{url}}" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">{{title}}</h5>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">$ {{price}} {{currency}}</li>
+                                <li class="list-group-item">Disponible: {{quantity}} pz</li>
+                            </ul>
+                            <div class="card-body">
+                                <a href="#" class="btn btn-primary">Comprar</a>
+                            </div>
+                        </div>`;
+
+                let replaceTemplateHome = templateHome.replace("{{url}}", url)
+                    .replace("{{price}}", price)
+                    .replace("{{title}}", title)
+                    .replace("{{currency}}", currency)
+                    .replace("{{quantity}}", quantity);
+
+                $("#container").append(replaceTemplateHome);
+
             });
-        })
-        .catch(function (error) {
-            console.log(JSON.stringify(error));
-        }); 
+        });
+
+    })
 
 
-
-
-homeTemplate();
-
+if ($("#home-btn").click) {
+    getHome();
+} 
+if($("#store-btn").click){
+    getItems();
+}
 
 });
 
