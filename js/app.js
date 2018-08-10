@@ -1,9 +1,10 @@
 
 $(document).ready(function(){
 
-    const getHome = $("form").submit(function(ev) {
+    const getHome = function(ev) {
+        ev.preventDefault();
     let templateHome = ` 
-    <main>
+    <main id="home-h">
         <section id="cont-home" class="opac">
             <div id="home" class="">
                 <div class="" id="buy-cont">
@@ -50,11 +51,13 @@ $(document).ready(function(){
         </section>
     </main>`;
     $("#container").append(templateHome);
+    
+     $('.card').hide();   
 
-})
+}
 
 
-    const getItems = $("form").submit(function (ev) {
+    const getItems = function (ev) {
         ev.preventDefault();
         const getURL = 'https://api.mercadolibre.com/sites/MLM/search?q="+ pets';
 
@@ -62,6 +65,33 @@ $(document).ready(function(){
 
             let items = data.results;
             console.log(items);
+
+            paypal.Button.render({
+                env: 'sandbox',
+                client: {
+                  sandbox: 'AaN05Ca3NfygNhC875AgaSbMrs9_25uqCrO850b-w1CwUEPPFGKeUw0LFh0wqyY80VdsRNH5iuHV51JD',
+                  production: '<insert production client id>'
+                },
+                payment: function () {
+                  var env = this.props.env;
+                  var client = this.props.client;
+                  return paypal.rest.payment.create(env, client, {
+                    transactions: [
+                      {
+                        amount: { total: '1.00', currency: 'USD' }
+                      }
+                    ]
+                  });
+                },
+                commit: true,
+                onAuthorize: function (data, actions) {
+                  return actions.payment.execute()
+                    .then(function () {
+                      window.alert('Gracias por tu compra!');
+                    });
+                }
+              }, '#paypal-button');
+
             items.forEach(element => {
                 let url = element.thumbnail;
                 let title = element.title;
@@ -69,7 +99,7 @@ $(document).ready(function(){
                 let currency = element.currency_id;
                 let quantity = element.available_quantity;
                 let templateHome = `
-                        <div class="card" style="width: 18rem;">
+                        <div id="card-item" class="card" style="width: 18rem;">
                             <img class="card-img-top" src="{{url}}" alt="Card image cap">
                             <div class="card-body">
                                 <h5 class="card-title">{{title}}</h5>
@@ -83,6 +113,8 @@ $(document).ready(function(){
                             </div>
                         </div>`;
 
+                   
+
                 let replaceTemplateHome = templateHome.replace("{{url}}", url)
                     .replace("{{price}}", price)
                     .replace("{{title}}", title)
@@ -90,19 +122,22 @@ $(document).ready(function(){
                     .replace("{{quantity}}", quantity);
 
                 $("#container").append(replaceTemplateHome);
+                $("#paypal-button").show();
+                $('#home-h').hide();
 
+                
+                
             });
         });
 
-    })
+    }
+
+  
 
 
-if ($("#home-btn").click) {
-    getHome();
-} 
-if($("#store-btn").click){
-    getItems();
-}
+$("#home-btn").click(getHome);
+$("#store-btn").click(getItems);
 
+$("#paypal-button").hide();
 });
 

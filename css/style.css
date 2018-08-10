@@ -7,6 +7,11 @@ body{
       
 }
 
+input{
+    background: none;
+    border: none;
+}
+
 .opac{
     background-color: rgba(0, 0, 0, 0.3);
 }
@@ -75,4 +80,6 @@ body{
 
 .card{
     display: inline-block;
+    float: left;
+    margin: .5em;
 }
