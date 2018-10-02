@@ -2,7 +2,7 @@
 $(document).ready(function(){
 
     const getHome = function(ev) {
-        ev.preventDefault();
+        // ev.preventDefault();
     let templateHome = ` 
     <main id="home-h">
         <section id="cont-home" class="opac">
@@ -10,7 +10,7 @@ $(document).ready(function(){
                 <div class="" id="buy-cont">
                     <br>
                     <h1>
-                        Compra en
+                        Sigue a
                         <img src="assets/text_logo_w.PNG" alt="">
                     </h1>
                     <h2>y ayuda a un amigo a obtener un</h2>
@@ -23,7 +23,6 @@ $(document).ready(function(){
         <section id="cont-food" class="opac">
             <div id="food" class="mt-2">
                 <div class="" id="food-cont">
-                    <br>
                     <h1>
                         Sabías qué.... 
                     </h1>
@@ -52,7 +51,7 @@ $(document).ready(function(){
     </main>`;
     $("#container").append(templateHome);
     
-     $('.card').hide();   
+     $('.card').show();   
 
 }
 
@@ -139,5 +138,8 @@ $("#home-btn").click(getHome);
 $("#store-btn").click(getItems);
 
 $("#paypal-button").hide();
+
+getHome();
+
 });
 
